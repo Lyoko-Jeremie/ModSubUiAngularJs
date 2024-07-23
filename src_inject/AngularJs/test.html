@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--<script src="../../node_modules/angular/angular.js"></script>-->
+<script src="../../dist/webpack_inject_early.js"></script>
+<div id="aaaaa">
+    <div>
+        <app-container></app-container>
+<!--        {{window.externalComponentRef.externalComponents.length}}-->
+<!--        <div ng-repeat="c in window.externalComponentRef.externalComponents">-->
+<!--            <div dynamicComponent componentInfo="c"></div>-->
+<!--        </div>-->
+    </div>
+</div>
+<script>
+    const ee = document.getElementById('aaaaa');
+    console.log(ee);
+    window.installApp(ee);
+</script>
+</body>
+</html>
