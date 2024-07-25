@@ -109,7 +109,7 @@ export class ExternalComponentManager {
     }
 }
 
-const ngAppContainerInstance = new NgAppContainer();
+export const ngAppContainerInstance = new NgAppContainer();
 
 ngAppContainerInstance.externalComponentRef.addComponent({
     selector: 'a-component1',
@@ -140,4 +140,4 @@ ngAppContainerInstance.externalComponentRef.addComponent({
 });
 
 // @ts-ignore
-window.installApp = ngAppContainerInstance.installApp.bind(ngAppContainerInstance);
+// window.installApp = ngAppContainerInstance.installApp.bind(ngAppContainerInstance);

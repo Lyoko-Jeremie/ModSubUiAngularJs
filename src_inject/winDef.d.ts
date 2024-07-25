@@ -1,4 +1,3 @@
-import {ModWebpackExampleTs_patchLinkButton} from "./preload";
 
 export {};
 
@@ -8,6 +7,8 @@ declare global {
         modSC2DataManager: SC2DataManager;
 
         modImgLoaderHooker: ImgLoaderHooker;
+
+        modSubUiAngularJs: NgAppContainer;
 
         jQuery: jQuery;
     }

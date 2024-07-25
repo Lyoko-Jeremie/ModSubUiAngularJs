@@ -1,2 +1,4 @@
 import 'reflect-metadata';
-import './AngularJs/appInit';
+import {ngAppContainerInstance} from './AngularJs/appInit';
+
+window.modSubUiAngularJs = ngAppContainerInstance;
