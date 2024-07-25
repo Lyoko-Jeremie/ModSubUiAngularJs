@@ -1,7 +1,55 @@
 import ng from 'angular';
 import angular from 'angular';
 
-const M: ng.IModule = ng.module('app', []);
+
+export class NgAppContainer {
+    Main: ng.IModule;
+
+    externalComponentRef: ExternalComponentManager;
+
+    constructor() {
+        const thisPtr = this;
+        this.Main = ng.module('app', []);
+
+        this.Main.directive('dynamicComponent', function ($compile: ng.ICompileService) {
+            return {
+                restrict: 'A',
+                scope: {
+                    componentInfo: '='
+                },
+                link: function (scope: ng.IScope | any, element) {
+                    const componentElement = angular.element('<' + scope.componentInfo.selector + '></' + scope.componentInfo.selector + '>');
+                    componentElement.attr('data', 'componentInfo.data');
+                    element.append(componentElement);
+                    $compile(componentElement)(scope);
+                }
+            };
+        });
+
+        this.Main.component('appContainer', {
+            // bindings: {externalComponents: '<'},
+            template: `
+{{externalComponentRef.externalComponents.length}}
+<div ng-repeat="c in externalComponentRef.externalComponents">
+    <div dynamic-component component-info="c"></div>
+</div>
+`,
+            controller: ['$scope', '$compile', function ($scope: ng.IScope, $compile: ng.ICompileService) {
+                // console.log('app-container');
+                // console.log(externalComponentRef);
+                ($scope as any).externalComponentRef = thisPtr.externalComponentRef;
+            }],
+        });
+
+        this.externalComponentRef = new ExternalComponentManager(this.Main);
+        console.log('NgAppContainer created');
+    }
+
+    installApp(el: HTMLElement) {
+        this.externalComponentRef.fullFillComponent();
+        ng.bootstrap(el, ['app']);
+    }
+}
 
 
 export interface AppExternalComponentInfo<DataType extends (any | undefined)> {
@@ -57,48 +105,9 @@ export class ExternalComponentManager {
     }
 }
 
-function addNewComponent(rootAppModule: ng.IModule) {
-    rootAppModule.component('newComponent', {
-        template: '<div>new component</div>',
-        controller: function () {
-            console.log('new component');
-        }
-    });
-}
+const ngAppContainerInstance = new NgAppContainer();
 
-const externalComponentRef = new ExternalComponentManager(M);
-
-M.directive('dynamicComponent', function ($compile: ng.ICompileService) {
-    return {
-        restrict: 'A',
-        scope: {
-            componentInfo: '='
-        },
-        link: function (scope: ng.IScope | any, element) {
-            const componentElement = angular.element('<' + scope.componentInfo.selector + '></' + scope.componentInfo.selector + '>');
-            componentElement.attr('data', 'componentInfo.data');
-            element.append(componentElement);
-            $compile(componentElement)(scope);
-        }
-    };
-});
-
-M.component('appContainer', {
-    // bindings: {externalComponents: '<'},
-    template: `
-{{externalComponentRef.externalComponents.length}}
-<div ng-repeat="c in externalComponentRef.externalComponents">
-    <div dynamic-component component-info="c"></div>
-</div>
-`,
-    controller: ['$scope', '$compile', function ($scope: ng.IScope, $compile: ng.ICompileService) {
-        // console.log('app-container');
-        // console.log(externalComponentRef);
-        ($scope as any).externalComponentRef = externalComponentRef;
-    }],
-})
-
-externalComponentRef.addComponent({
+ngAppContainerInstance.externalComponentRef.addComponent({
     selector: 'a-component1',
     componentCreateInfo: () => {
         return {
@@ -112,7 +121,7 @@ externalComponentRef.addComponent({
     },
     data: 1,
 });
-externalComponentRef.addComponent({
+ngAppContainerInstance.externalComponentRef.addComponent({
     selector: 'a-component2',
     componentRegister: rootAppModule => {
         rootAppModule.component('aComponent2', {
@@ -126,10 +135,5 @@ externalComponentRef.addComponent({
     data: 2,
 });
 
-function installApp(el: HTMLElement) {
-    externalComponentRef.fullFillComponent();
-    ng.bootstrap(el, ['app']);
-}
-
 // @ts-ignore
-window.installApp = installApp;
+window.installApp = ngAppContainerInstance.installApp.bind(ngAppContainerInstance);
