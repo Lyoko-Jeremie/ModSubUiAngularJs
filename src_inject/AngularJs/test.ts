@@ -1,74 +1,153 @@
-import {Component, EventEmitter, Inject, Injectable, Input, NgModule, OnInit, Output, bundle} from 'ng-metadata/core';
+import 'reflect-metadata';
+import {
+    Component,
+    EventEmitter,
+    Inject,
+    Injectable,
+    Input,
+    NgModule,
+    OnInit,
+    Output,
+    bundle,
+    Directive
+} from 'ng-metadata/core';
 import ng from 'angular';
+import {NgModuleMetadataType} from "ng-metadata/src/core/directives/metadata_directives";
 
-// app.component.ts
-// import { Component } from 'ng-metadata/core';
+let globalInjectService: undefined | ng.auto.IInjectorService = undefined;
+
+export interface AppExternalComponentInfo<DataType extends (any | undefined)> {
+    selector: string;
+    component: NonNullable<NgModuleMetadataType['declarations']>[0];
+    data: DataType;
+}
 
 @Component({
-    selector: 'my-app',
-    template: `<hero [name]="$ctrl.name" (call)="$ctrl.onCall($event)"></hero>`
+    selector: 'a-component',
+    template: `<div>{{name}}</div>`
 })
-export class AppComponent {
+export class AComponent {
     name = 'Martin';
 
     onCall() { /*...*/
     }
 }
 
-// hero.service.ts
-// import { Injectable, Inject } from 'ng-metadata/core';
+const externalComponentRef: {
+    externalComponents: AppExternalComponentInfo<any>[],
+} = {
+    externalComponents: [
+        {
+            selector: 'a-component',
+            component: AComponent,
+            data: undefined,
+        }
+    ],
+};
 
-@Injectable()
-export class HeroService {
-    constructor(@Inject('$http') private $http: ng.IHttpService) {
+@Directive({
+    selector: '[dynamicComponent]',
+})
+class DynamicComponentDirective {
+    @Input() componentInfo!: AppExternalComponentInfo<any>;
+
+    static link(scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, controller: any, transclude: ng.ITranscludeFunction) {
+
+        const $compile: ng.ICompileService = globalInjectService?.get('$compile')!;
+
+        const componentElement = ng.element('<' + attrs.componentInfo.selector + '></' + attrs.componentInfo.selector + '>');
+        componentElement.attr('data', 'componentInfo.data');
+        element.append(componentElement);
+        const ij = ng.injector(['ng']);
+        console.log('ij', ij);
+
+        console.log('$compile', $compile)
+        $compile(componentElement)(scope);
+
     }
 
-    fetchAll() {
-        return this.$http.get('/api/heroes');
-    }
+    // constructor(
+    //     @Inject('$compile') $compile: ng.ICompileService,
+    // ) {
+    // }
+
 }
 
-// hero.component.ts
-// import { HeroService } from './hero.service';
+function addDynamicComponentDirective(m: ng.IModule) {
+    m.directive('dynamicComponent', function ($compile) {
+        return {
+            restrict: 'A',
+            scope: {
+                componentInfo: '='
+            },
+            link: function (scope: ng.IScope | any, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, controller: any,) {
+                var componentElement = ng.element('<' + scope.componentInfo.selector + '></' + scope.componentInfo.selector + '>');
+                componentElement.attr('data', 'componentInfo.data');
+                element.append(componentElement);
+                $compile(componentElement)(scope);
+            }
+        };
+    });
+    console.log('addDynamicComponentDirective', m);
+}
 
 @Component({
-    selector: 'hero',
-    templateUrl: `
-    <div>
-    </div>
-    `,
-    legacy: {transclude: true}
+    selector: 'app-container',
+    template: `
+<div>
+    {{JSON.stringify($ctrl)}}
+<!--    {{JSON.stringify($ctrl.externalComponents)}}-->
+<!--    {{$ctrl.externalComponents.length}}-->
+<!--    <div ng-repeat="c in $ctrl.externalComponents">-->
+<!--        <div dynamicComponent componentInfo="c"></div>-->
+<!--    </div>-->
+</div>`
 })
-export class HeroComponent implements OnInit {
-
-    // one way binding determined by parent template
-    @Input() name: string = '';
-    @Output() call = new EventEmitter<void>();
+class AppComponent implements OnInit {
+    externalComponents!: AppExternalComponentInfo<any>[];
 
     constructor(
-        // we need to inject via @Inject because angular 1 doesn't give us proper types
-        @Inject('$log') private $log: ng.ILogService,
-        // here we are injecting by Type which is possible thanks to reflect-metadata and TypeScript and because our service
-        // is defined as a class
-        private heroSvc: HeroService
+        @Inject('$scope') $scope: ng.IScope,
     ) {
     }
 
-    ngOnInit() { /* your init logic */
+    ngOnInit(): any {
+        this.externalComponents = externalComponentRef.externalComponents;
+        console.log('this.externalComponents.length', JSON.stringify(this.externalComponents))
+        console.log(externalComponentRef.externalComponents)
     }
 
 }
 
 @NgModule({
-    declarations: [AppComponent, HeroComponent],
-    providers: [HeroService]
+    declarations: [
+        AppComponent,
+        DynamicComponentDirective,
+        ...externalComponentRef.externalComponents.map(c => c.component),
+    ],
+    providers: []
 })
-export class AppModule {
+class AppModule {
 }
 
-const Ng1AppModule = bundle(AppModule, []).name;
-export const N1AppModule = ng.module('Ng1AppModule', [Ng1AppModule]);
-// const appRootElem = document.querySelector('#my-app') || document.body;
-// ng.bootstrap(appRootElem, [N1AppModule.name], {strictDi: true})
+console.log('AppModule', AppModule);
 
+export function installApp(appRootElem: Element) {
 
+    // platformBrowserDynamic().bootstrapModule(AppModule);
+    ng.element(document).ready(() => {
+        const Ng1AppModule = bundle(AppModule, []);
+        addDynamicComponentDirective(Ng1AppModule);
+        const Ng1AppModuleName = Ng1AppModule.name;
+        const N1AppModule = ng.module(Ng1AppModuleName, [Ng1AppModuleName]);
+        // const appRootElem = document.querySelector('#my-app') || document.body;
+        globalInjectService = ng.bootstrap(appRootElem, [N1AppModule.name], {strictDi: true})
+
+        console.log('start')
+    });
+}
+
+// @ts-ignore
+window.installApp = installApp;
+// @ts-ignore
+window.externalComponentRef = externalComponentRef;
