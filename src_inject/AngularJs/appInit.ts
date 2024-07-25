@@ -71,7 +71,7 @@ export class ExternalComponentManager {
     protected isInit = false;
 
     constructor(
-        protected M: ng.IModule,
+        protected _M: ng.IModule,
     ) {
     }
 
@@ -89,10 +89,10 @@ export class ExternalComponentManager {
             let selector: string;
             if (c.componentCreateInfo) {
                 const componentInfo = c.componentCreateInfo();
-                this.M.component(componentInfo.componentName, componentInfo.componentOptions);
+                this._M.component(componentInfo.componentName, componentInfo.componentOptions);
                 selector = componentInfo.selector;
             } else if (c.componentRegister) {
-                selector = c.componentRegister(this.M).selector;
+                selector = c.componentRegister(this._M).selector;
             } else {
                 return;
             }
@@ -102,6 +102,10 @@ export class ExternalComponentManager {
 
     get externalComponents() {
         return this._externalComponents;
+    }
+
+    get M() {
+        return this._M;
     }
 }
 
