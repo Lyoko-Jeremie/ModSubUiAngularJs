@@ -1,4 +1,3 @@
-
 export {};
 
 declare global {
@@ -8,7 +7,7 @@ declare global {
 
         modImgLoaderHooker: ImgLoaderHooker;
 
-        modSubUiAngularJs: NgAppContainer;
+        modSubUiAngularJs: ModSubUiAngularJs;
 
         jQuery: jQuery;
     }
