@@ -17,9 +17,10 @@ export class NgAppContainer {
 
     constructor(
         protected externalComponentRef: ExternalComponentManager,
+        protected nameApp: string,
     ) {
         const thisPtr = this;
-        this.Main = ng.module('app', []);
+        this.Main = ng.module(nameApp || 'app', []);
 
         this.Main.directive('dynamicComponent', function ($compile: ng.ICompileService) {
             return {
@@ -60,11 +61,11 @@ export class NgAppContainer {
     installApp(el: HTMLElement) {
         if (this.el) {
             console.error('App already installed');
-            return;
+            return ng.element(el).injector();
         }
         this.el = el;
         this.externalComponentRef.fullFillComponent(this.Main);
-        ng.bootstrap(el, ['app']);
+        return ng.bootstrap(el, [(this.nameApp || 'app')]);
     }
 
     destroyApp() {

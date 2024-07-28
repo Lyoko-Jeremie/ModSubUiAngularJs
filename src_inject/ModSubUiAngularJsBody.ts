@@ -43,14 +43,16 @@ export type AppContainerManagerMethodsInterfaceKey = keyof AppContainerManagerMe
 export class AppContainerManager {
     ngAppContainerInstance?: NgAppContainer;
 
-    constructor() {
+    constructor(
+        public nameApp: ExternalComponentManagerListNameType,
+    ) {
         this.externalComponentManager = new ExternalComponentManager();
     }
 
     bootstrap(el: HTMLElement) {
         this.ngAppContainerInstance?.destroyApp();
-        this.ngAppContainerInstance = new NgAppContainer(this.externalComponentManager);
-        this.ngAppContainerInstance.installApp(el);
+        this.ngAppContainerInstance = new NgAppContainer(this.externalComponentManager, this.nameApp);
+        return this.ngAppContainerInstance.installApp(el);
     }
 
     release() {
@@ -81,7 +83,7 @@ export class ModSubUiAngularJsBodyBase {
     constructor() {
         this._appContainerManager = {} as any;
         ExternalComponentManagerListName.forEach((name) => {
-            this._appContainerManager[name] = new AppContainerManager();
+            this._appContainerManager[name] = new AppContainerManager(name);
         });
     }
 
