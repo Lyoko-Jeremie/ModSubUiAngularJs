@@ -22,6 +22,10 @@ export interface OrderComponentConfig {
     ) => void;
     hostClass?: string;
     selectClass?: string;
+    text?: {
+        MoveSelectedItemUp?: string,
+        MoveSelectedItemDown?: string,
+    };
 }
 
 export const createOrderComponent: ComponentRegistryCallback = (rootAppModule: ng.IModule) => {
@@ -37,8 +41,8 @@ export const createOrderComponent: ComponentRegistryCallback = (rootAppModule: n
                 >{{item.str}}</option>
             </select>
             <div style="display: block;" class="enable-order-component-enable-select-button">
-                <input type="button" ng-click="MoveSelectedItem('up1')" value="MoveSelectedItemUp" />
-                <input type="button" ng-click="MoveSelectedItem('down1')" value="MoveSelectedItemDown" />
+                <input type="button" ng-click="MoveSelectedItem('up1')" value="t('MoveSelectedItemUp')" />
+                <input type="button" ng-click="MoveSelectedItem('down1')" value="t('MoveSelectedItemDown')" />
             </div>
 <!--            <button -->
 <!--                style="display: block;" -->
@@ -70,6 +74,11 @@ export const createOrderComponent: ComponentRegistryCallback = (rootAppModule: n
                     $scope.$ctrl.data.onChange(action, l, $scope.selectedKey, $scope.$ctrl.data);
                 }
             };
+
+            $scope.t = function (textTag: keyof OrderComponentConfig['text']) {
+                // console.log('t', textTag, $scope.$ctrl.data.text?.[textTag], $scope.$ctrl.data.text);
+                return $scope.$ctrl.data.text?.[textTag] || textTag;
+            }
 
             $element.css('display', 'block');
             $element.addClass('order-component-host');
