@@ -43,18 +43,18 @@ export const createOrderComponent: ComponentRegistryCallback = (rootAppModule: n
                             style="display: block;" 
                             ng-click="MoveSelectedItem('down1')"
                         >MoveSelectedItemDown</button>
-                        <button 
-                            style="display: block;" 
-                            ng-click="test()"
-                        >test</button>
+<!--                        <button -->
+<!--                            style="display: block;" -->
+<!--                            ng-click="test()"-->
+<!--                        >test</button>-->
                     </div>
                 `,
         controller: ['$scope', '$compile', '$element', function (scope: ng.IScope, $compile: ng.ICompileService, $element: ng.IAugmentedJQuery) {
             const $scope = scope as ng.IScope & { $ctrl: { data: OrderComponentConfig } } & Record<string, any>;
             // $scope.data: OrderComponentConfig;
-            console.log('Order Component Controller', clone($scope));
-            console.log('Order Component Controller', get(clone($scope), '$ctrl'));
-            console.log('Order Component Controller', get($scope, '$ctrl.data'));
+            // console.log('Order Component Controller', clone($scope));
+            // console.log('Order Component Controller', get(clone($scope), '$ctrl'));
+            // console.log('Order Component Controller', get($scope, '$ctrl.data'));
 
             const callOnChange = (action: OrderAction) => {
                 if ($scope.$ctrl.data.onChange) {
@@ -80,7 +80,7 @@ export const createOrderComponent: ComponentRegistryCallback = (rootAppModule: n
             $scope.selectedKey = Number.MAX_SAFE_INTEGER;
 
             $scope.selectKey = function (key: ListType[0]) {
-                console.log('selectKey', key);
+                // console.log('selectKey', key);
                 $scope.selectedKey = key.key;
                 callOnChange(OrderAction.select);
             }
