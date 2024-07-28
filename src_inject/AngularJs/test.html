@@ -57,7 +57,21 @@
                     str: `name-${i}`,
                     selected: false,
                 };
-            }),
+            }).concat([
+                {
+                    key: 100,
+                    str: `name------------------+++++++++++++++++++++++++++++++------------100`,
+                    selected: false,
+                },
+                {
+                    key: 101,
+                    str: `name-101`,
+                    selected: false,
+                },
+            ]),
+            onChange: (list, selectedKey, configInfo) => {
+                console.log('onChange', list, selectedKey, configInfo);
+            },
         },
     });
 

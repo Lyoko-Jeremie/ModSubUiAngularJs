@@ -2,21 +2,32 @@ import ng from "angular";
 import {ComponentRegistryCallback} from "../ExternalComponentManager";
 import {get, clone} from "lodash";
 
+export enum OrderAction {
+    up1 = 'up1',
+    down1 = 'down1',
+    select = 'select',
+}
+
 export interface OrderComponentConfig {
     list: {
-        key: string;
+        key: string | number;
         str: string;
         selected: boolean;
     }[];
+    onChange?: (
+        action: OrderAction,
+        list: OrderComponentConfig['list'],
+        selectedKey: string | number,
+        config: OrderComponentConfig & Record<any, any>,
+    ) => void;
 }
 
 export const createOrderComponent: ComponentRegistryCallback = (rootAppModule: ng.IModule) => {
     rootAppModule.component('orderComponent', {
         bindings: {data: '<'},
         template: `
-                    <div>
-                        {{JSON.stringify($ctrl.data)}}
-                        <select multiple>
+                    <div style="min-height: 15em;">
+                        <select multiple style="min-height: 15em;min-width: 10em;">
                             <option
                                 ng-repeat="item in $ctrl.data.list track by item.key" 
                                 value="{{item.key}}" 
@@ -24,31 +35,54 @@ export const createOrderComponent: ComponentRegistryCallback = (rootAppModule: n
                                 ng-click="selectKey(item)"
                             >{{item.str}}</option>
                         </select>
-                        <button 
+                        <button
+                            style="display: block;" 
                             ng-click="MoveSelectedItem('up1')"
                         >MoveSelectedItemUp</button>
                         <button
+                            style="display: block;" 
                             ng-click="MoveSelectedItem('down1')"
                         >MoveSelectedItemDown</button>
                         <button 
+                            style="display: block;" 
                             ng-click="test()"
                         >test</button>
                     </div>
                 `,
-        controller: ['$scope', '$compile', function (scope: ng.IScope, $compile: ng.ICompileService) {
+        controller: ['$scope', '$compile', '$element', function (scope: ng.IScope, $compile: ng.ICompileService, $element: ng.IAugmentedJQuery) {
             const $scope = scope as ng.IScope & { $ctrl: { data: OrderComponentConfig } } & Record<string, any>;
             // $scope.data: OrderComponentConfig;
             console.log('Order Component Controller', clone($scope));
             console.log('Order Component Controller', get(clone($scope), '$ctrl'));
             console.log('Order Component Controller', get($scope, '$ctrl.data'));
 
+            const callOnChange = (action: OrderAction) => {
+                if ($scope.$ctrl.data.onChange) {
+                    const l = $scope.$ctrl.data.list.map((item) => {
+                        return {
+                            key: item.key,
+                            str: item.str,
+                            selected: item.selected,
+                        };
+                    });
+                    const selectedN = l.find((item) => item.key === $scope.selectedKey);
+                    if (selectedN) {
+                        selectedN.selected = true;
+                    }
+                    $scope.$ctrl.data.onChange(action, l, $scope.selectedKey, $scope.$ctrl.data);
+                }
+            };
+
+            $element.css('display', 'block');
+
             type ListType = OrderComponentConfig['list'];
 
-            $scope.selectedKey = '';
+            $scope.selectedKey = Number.MAX_SAFE_INTEGER;
 
             $scope.selectKey = function (key: ListType[0]) {
                 console.log('selectKey', key);
                 $scope.selectedKey = key.key;
+                callOnChange(OrderAction.select);
             }
 
             // Move list items up or down or swap
@@ -78,8 +112,10 @@ export const createOrderComponent: ComponentRegistryCallback = (rootAppModule: n
                 }
                 if (direction === 'up1' && selectedIndex > 0) {
                     $scope.listItemUp(selectedIndex, list);
+                    callOnChange(OrderAction.up1);
                 } else if (direction === 'down1' && selectedIndex < list.length - 1) {
                     $scope.listItemDown(selectedIndex, list);
+                    callOnChange(OrderAction.down1);
                 }
             }
 
