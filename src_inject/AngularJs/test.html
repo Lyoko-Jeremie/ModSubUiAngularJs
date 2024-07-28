@@ -51,10 +51,13 @@
     window.modModSubUiAngularJsBody.appContainerManager.ModGuiConfig.addComponent({
         selector: 'order-component',
         data: {
-            order: {
-                id: 1,
-                name: 'order1',
-            }
+            list: Array.from({length: 10}).map((v, i) => {
+                return {
+                    key: i,
+                    str: `name-${i}`,
+                    selected: false,
+                };
+            }),
         },
     });
 
