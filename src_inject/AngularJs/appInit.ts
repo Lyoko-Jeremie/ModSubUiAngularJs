@@ -45,7 +45,7 @@ export class NgAppContainer {
 </div>
 `,
             controller: ['$scope', '$compile', function ($scope: ng.IScope, $compile: ng.ICompileService) {
-                // console.log('app-container');
+                // console.log('app-container', thisPtr.externalComponentRef.externalComponentsShow);
                 // console.log(externalComponentRef);
                 ($scope as any).externalComponentRef = thisPtr.externalComponentRef;
                 thisPtr.externalComponentRef.externalComponentsShow;
