@@ -48,10 +48,38 @@
         data: undefined,
     });
 
+    // window.modModSubUiAngularJsBody.appContainerManager.ModGuiConfig.addComponent({
+    //     selector: 'order-component',
+    //     data: {
+    //         list: Array.from({length: 10}).map((v, i) => {
+    //             return {
+    //                 key: i,
+    //                 str: `name-${i}`,
+    //                 selected: false,
+    //             };
+    //         }).concat([
+    //             {
+    //                 key: 100,
+    //                 str: `name------------------+++++++++++++++++++++++++++++++------------100`,
+    //                 selected: false,
+    //             },
+    //             {
+    //                 key: 101,
+    //                 str: `name-101`,
+    //                 selected: false,
+    //             },
+    //         ]),
+    //         onChange: (action, list, selectedKey, configInfo) => {
+    //             console.log('onChange', [action, list, selectedKey, configInfo]);
+    //         },
+    //     },
+    // });
+
+
     window.modModSubUiAngularJsBody.appContainerManager.ModGuiConfig.addComponent({
-        selector: 'order-component',
+        selector: 'enable-order-component',
         data: {
-            list: Array.from({length: 10}).map((v, i) => {
+            listEnabled: Array.from({length: 10}).map((v, i) => {
                 return {
                     key: i,
                     str: `name-${i}`,
@@ -69,9 +97,28 @@
                     selected: false,
                 },
             ]),
-            onChange: (action, list, selectedKey, configInfo) => {
-                console.log('onChange', [action, list, selectedKey, configInfo]);
+            listDisabled: Array.from({length: 10}).map((v, i) => {
+                return {
+                    key: i + 1000,
+                    str: `nameA-${i}`,
+                    selected: false,
+                };
+            }).concat([
+                {
+                    key: 100 + 1000,
+                    str: `nameA------------------+++++++++++++++++++++++++++++++------------100`,
+                    selected: false,
+                },
+                {
+                    key: 101 + 1000,
+                    str: `nameA-101`,
+                    selected: false,
+                },
+            ]),
+            onChange: (action, listEnabled, listDisabled, selectedKeyEnabled, selectedKeyDisabled, configInfo) => {
+                console.log('onChange', [action, listEnabled, listDisabled, selectedKeyEnabled, selectedKeyDisabled, configInfo]);
             },
+            // noHrSplit: true,
         },
     });
 
