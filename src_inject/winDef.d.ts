@@ -5,8 +5,6 @@ declare global {
         modUtils: ModUtils;
         modSC2DataManager: SC2DataManager;
 
-        modImgLoaderHooker: ImgLoaderHooker;
-
         modSubUiAngularJs: ModSubUiAngularJs;
 
         jQuery: jQuery;
