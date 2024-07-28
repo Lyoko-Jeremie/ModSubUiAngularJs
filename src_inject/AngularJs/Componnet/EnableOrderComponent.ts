@@ -37,6 +37,7 @@ export interface EnableOrderComponentConfig {
     selectEnabledClass?: string;
     selectDisabledClass?: string;
     noHrSplit?: boolean;
+    buttonClass?: string;
 }
 
 
@@ -53,18 +54,18 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
                 >{{item.str}}</option>
             </select>
             <div style="display: block;" class="enable-order-component-enable-select-button">
-                <button ng-click="MoveSelectedItem('up1', 'enable')">MoveSelectedItemUp</button>
-                <button ng-click="MoveSelectedItem('down1', 'enable')">MoveSelectedItemDown</button>
+                <input type="button" ng-click="MoveSelectedItem('up1', 'enable')" value="MoveEnabledSelectedItemUp" />
+                <input type="button" ng-click="MoveSelectedItem('down1', 'enable')" value="MoveEnabledSelectedItemDown" />
             </div>
             <hr ng-if="! $ctrl.data.noHrSplit" />
             <div style="display: block;" class="enable-order-component-enable-disable-select-button">
-                <button ng-click="EnableDisableItem('enable')">EnableSelectedItem</button>
-                <button ng-click="EnableDisableItem('disable')">DisableSelectedItem</button>
+                <input type="button" ng-click="EnableDisableItem('enable')" value="EnableSelectedItem" />
+                <input type="button" ng-click="EnableDisableItem('disable')" value="DisableSelectedItem" />
             </div>
             <hr ng-if="! $ctrl.data.noHrSplit" />
             <div style="display: block;" class="enable-order-component-disable-select-button">
-                <button  ng-click="MoveSelectedItem('up1', 'disable')">MoveSelectedItemUp</button>
-                <button ng-click="MoveSelectedItem('down1', 'disable')">MoveSelectedItemDown</button>
+                <input type="button" ng-click="MoveSelectedItem('up1', 'disable')" value="MoveDisabledSelectedItemUp" />
+                <input type="button" ng-click="MoveSelectedItem('down1', 'disable')" value="MoveDisabledSelectedItemDown" />
             </div>
             <select multiple style="min-height: 15em;min-width: 10em;" class="enable-order-component-select select-disable">
                 <option
@@ -129,6 +130,9 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
                 }
                 if ($scope.$ctrl.data.selectDisabledClass) {
                     $element.find('.select-disable').addClass($scope.$ctrl.data.selectDisabledClass);
+                }
+                if ($scope.$ctrl.data.buttonClass) {
+                    $element.find('button').addClass($scope.$ctrl.data.buttonClass);
                 }
             }
 

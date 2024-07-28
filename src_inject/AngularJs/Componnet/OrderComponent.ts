@@ -36,14 +36,10 @@ export const createOrderComponent: ComponentRegistryCallback = (rootAppModule: n
                     ng-click="selectKey(item)"
                 >{{item.str}}</option>
             </select>
-            <button
-                style="display: block;" 
-                ng-click="MoveSelectedItem('up1')"
-            >MoveSelectedItemUp</button>
-            <button
-                style="display: block;" 
-                ng-click="MoveSelectedItem('down1')"
-            >MoveSelectedItemDown</button>
+            <div style="display: block;" class="enable-order-component-enable-select-button">
+                <input type="button" ng-click="MoveSelectedItem('up1')" value="MoveSelectedItemUp" />
+                <input type="button" ng-click="MoveSelectedItem('down1')" value="MoveSelectedItemDown" />
+            </div>
 <!--            <button -->
 <!--                style="display: block;" -->
 <!--                ng-click="test()"-->

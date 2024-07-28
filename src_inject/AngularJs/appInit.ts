@@ -65,6 +65,7 @@ export class NgAppContainer {
         }
         this.el = el;
         this.externalComponentRef.fullFillComponent(this.Main);
+        el.appendChild(document.createElement('app-container'));
         return ng.bootstrap(el, [(this.nameApp || 'app')]);
     }
 
