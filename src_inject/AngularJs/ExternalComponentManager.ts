@@ -42,11 +42,11 @@ export class ExternalComponentManager {
     }
 
     addComponent<T>(componentShowInfo: ExternalComponentShowInfo<T>) {
-        if (this.isInit) {
-            console.error('Cannot addComponent after fullFillComponent');
-            return;
-        }
         this._externalComponentsShow.push(componentShowInfo);
+    }
+
+    cleanComponent<T>(componentShowInfo: ExternalComponentShowInfo<T>) {
+        this._externalComponentsShow = [];
     }
 
     fullFillComponent(

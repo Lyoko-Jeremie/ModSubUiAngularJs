@@ -10,7 +10,7 @@ import {
     ExternalComponentShowInfo
 } from "./AngularJs/ExternalComponentManager";
 
-const ExternalComponentManagerListName = [
+export const ExternalComponentManagerListName = [
     'ModGuiConfig',
     'ModInGameConfig',
 ] as const;
@@ -20,6 +20,7 @@ type ExternalComponentManagerListNameType = typeof ExternalComponentManagerListN
 export type bootstrapFunctionType = (el: HTMLElement) => void;
 export type releaseFunctionType = () => void;
 export type addComponentFunctionType = ExternalComponentManager['addComponent'];
+export type cleanComponentFunctionType = ExternalComponentManager['addComponent'];
 export type registryComponentFunctionType = ExternalComponentManager['registryComponent'];
 
 type AppContainerManagerMethodsType = {
@@ -28,6 +29,8 @@ type AppContainerManagerMethodsType = {
     [K in ExternalComponentManagerListNameType as `release${ /*Capitalize<K>*/ K}`]: releaseFunctionType;
 } & {
     [K in ExternalComponentManagerListNameType as `addComponent${ /*Capitalize<K>*/ K}`]: addComponentFunctionType;
+} & {
+    [K in ExternalComponentManagerListNameType as `cleanComponent${ /*Capitalize<K>*/ K}`]: cleanComponentFunctionType;
 } & {
     [K in ExternalComponentManagerListNameType as `registryComponent${ /*Capitalize<K>*/ K}`]: registryComponentFunctionType;
 };
@@ -59,6 +62,10 @@ export class AppContainerManager {
 
     addComponent<T>(componentInfo: ExternalComponentShowInfo<T>) {
         this.externalComponentManager.addComponent(componentInfo);
+    }
+
+    cleanComponent<T>(componentInfo: ExternalComponentShowInfo<T>) {
+        this.externalComponentManager.cleanComponent(componentInfo);
     }
 
     registryComponent<T>(componentInfo: ExternalComponentRegistryInfo) {
@@ -97,6 +104,7 @@ function AppContainerManagerMethodsFactory(): ModSubUiAngularJsBodyConstructorTy
                 (this as any)['bootstrap' + N/*.trim()*/] = this._appContainerManager[N].bootstrap.bind(this._appContainerManager[N]);
                 (this as any)['release' + N/*.trim()*/] = this._appContainerManager[N].release.bind(this._appContainerManager[N]);
                 (this as any)['addComponent' + N/*.trim()*/] = this._appContainerManager[N].addComponent.bind(this._appContainerManager[N]);
+                (this as any)['cleanComponent' + N/*.trim()*/] = this._appContainerManager[N].cleanComponent.bind(this._appContainerManager[N]);
                 (this as any)['registryComponent' + N/*.trim()*/] = this._appContainerManager[N].registryComponent.bind(this._appContainerManager[N]);
             });
         }

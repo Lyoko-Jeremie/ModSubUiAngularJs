@@ -2,9 +2,16 @@ import type {LifeTimeCircleHook, LogWrapper} from "../../../dist-BeforeSC2/ModLo
 import type {AddonPluginHookPointEx} from "../../../dist-BeforeSC2/AddonPlugin";
 import type {SC2DataManager} from "../../../dist-BeforeSC2/SC2DataManager";
 import type {ModUtils} from "../../../dist-BeforeSC2/Utils";
-import {ModSubUiAngularJsBody} from './ModSubUiAngularJsBody';
+import {ExternalComponentManagerListName, ModSubUiAngularJsBody} from './ModSubUiAngularJsBody';
 import {ModInfo} from "../../../dist-BeforeSC2/ModLoader";
 import {ModZipReader} from "../../../dist-BeforeSC2/ModZipReader";
+import {createOrderComponent} from "./AngularJs/Componnet/OrderComponent";
+import {createEnableOrderComponent} from "./AngularJs/Componnet/EnableOrderComponent";
+
+export const BuildInComponentList = [
+    createOrderComponent,
+    createEnableOrderComponent,
+];
 
 export class ModSubUiAngularJs extends ModSubUiAngularJsBody implements AddonPluginHookPointEx {
     private logger: LogWrapper;
@@ -35,6 +42,20 @@ export class ModSubUiAngularJs extends ModSubUiAngularJsBody implements AddonPlu
     }
 
     async whenSC2PassageEnd() {
+    }
+
+    protected buildInComponentInstalled: boolean = false;
+
+    installBuildInComponent() {
+        if (this.buildInComponentInstalled) {
+            return;
+        }
+        this.buildInComponentInstalled = true;
+        for (const name of ExternalComponentManagerListName) {
+            for (const component of BuildInComponentList) {
+                this.appContainerManager[name].registryComponent(component);
+            }
+        }
     }
 
 }
