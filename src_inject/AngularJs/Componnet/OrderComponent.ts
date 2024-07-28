@@ -1,8 +1,6 @@
 import ng from "angular";
 import {ComponentRegistryCallback} from "../ExternalComponentManager";
-import {assert, is} from "tsafe";
 import {get, clone} from "lodash";
-import {type} from "jquery";
 
 export interface OrderComponentConfig {
     list: {
