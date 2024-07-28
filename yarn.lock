@@ -1143,6 +1143,7 @@ __metadata:
     rxjs: ^5.5.12
     ts-loader: ^9.4.4
     ts-mixer: ^6.0.3
+    tsafe: ^1.7.2
     tsconfig-paths-webpack-plugin: ^4.1.0
     typescript: ^5.1.6
     webpack: ^5.88.2
@@ -6604,6 +6605,13 @@ __metadata:
   version: 6.0.4
   resolution: "ts-mixer@npm:6.0.4"
   checksum: 36b1af526befd74345e736e9aa16f5c28876ebcea07784da14d929149fd7e6028cfd2fe9304c8efe8cb91b588443a9cc9e991df58e4c6e602326edbaae2af3ab
+  languageName: node
+  linkType: hard
+
+"tsafe@npm:^1.7.2":
+  version: 1.7.2
+  resolution: "tsafe@npm:1.7.2"
+  checksum: a02da1bb81fed3c35b1ce1ea5f6118a632c436d41536ca7a8a399d5890add53a0352da6f48b5fbb66d9f80c66c71de45de6071f696781fa03e738058d112ee80
   languageName: node
   linkType: hard
 

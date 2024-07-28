@@ -19,7 +19,8 @@
     "moment": "^2.29.4",
     "ng-metadata": "^4.0.1",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^5.5.12"
+    "rxjs": "^5.5.12",
+    "tsafe": "^1.7.2"
   },
   "devDependencies": {
     "@types/jquery": "^3.5.30",

@@ -6,8 +6,8 @@
 </head>
 <body>
 <!--<script src="../../node_modules/angular/angular.js"></script>-->
-<script src="../../dist/webpack_inject_early.js"></script>
-<!--<script src="../../dist/test.js"></script>-->
+<!--<script src="../../dist/webpack_inject_early.js"></script>-->
+<script src="../../dist/test.js"></script>
 <div id="aaaaa">
     <app-container></app-container>
 </div>
@@ -15,7 +15,50 @@
     const ee = document.getElementById('aaaaa');
     console.log(ee);
 
-    window.modSubUiAngularJs.installApp(ee);
+    window.modModSubUiAngularJsBody.appContainerManager.ModGuiConfig.registryComponent(() => {
+        return {
+            selector: 'app-1',
+            componentName: 'app1',
+            componentOptions: {
+                template: '<div>app-container</div>',
+                controller: function ($scope) {
+                    console.log('app1');
+                },
+            }
+        };
+    });
+    window.modModSubUiAngularJsBody.appContainerManager.ModGuiConfig.registryComponent((rootAppModule) => {
+        rootAppModule.component('app2', {
+            template: '<div>app-container</div>',
+            controller: function ($scope) {
+                console.log('app2');
+            },
+        });
+        return {
+            selector: 'app-2',
+        };
+    });
+
+    window.modModSubUiAngularJsBody.appContainerManager.ModGuiConfig.addComponent({
+        selector: 'app-1',
+        data: undefined,
+    });
+    window.modModSubUiAngularJsBody.appContainerManager.ModGuiConfig.addComponent({
+        selector: 'app-2',
+        data: undefined,
+    });
+
+    window.modModSubUiAngularJsBody.appContainerManager.ModGuiConfig.addComponent({
+        selector: 'order-component',
+        data: {
+            order: {
+                id: 1,
+                name: 'order1',
+            }
+        },
+    });
+
+    window.modModSubUiAngularJsBody.appContainerManager.ModGuiConfig.bootstrap(ee);
 </script>
 </body>
 </html>

@@ -1,11 +1,14 @@
 import {
-    AppExternalComponentInfo,
-    ExternalComponentManager,
     NgAppContainer,
     getAngular,
     getNg
 } from './AngularJs/appInit';
 import type ng from "angular";
+import {
+    ExternalComponentManager,
+    ExternalComponentRegistryInfo,
+    ExternalComponentShowInfo
+} from "./AngularJs/ExternalComponentManager";
 
 const ExternalComponentManagerListName = [
     'ModGuiConfig',
@@ -16,7 +19,8 @@ type ExternalComponentManagerListNameType = typeof ExternalComponentManagerListN
 
 export type bootstrapFunctionType = (el: HTMLElement) => void;
 export type releaseFunctionType = () => void;
-export type addComponentFunctionType = <T>(componentInfo: AppExternalComponentInfo<T>) => void;
+export type addComponentFunctionType = ExternalComponentManager['addComponent'];
+export type registryComponentFunctionType = ExternalComponentManager['registryComponent'];
 
 type AppContainerManagerMethodsType = {
     [K in ExternalComponentManagerListNameType as `bootstrap${ /*Capitalize<K>*/ K}`]: bootstrapFunctionType;
@@ -24,6 +28,8 @@ type AppContainerManagerMethodsType = {
     [K in ExternalComponentManagerListNameType as `release${ /*Capitalize<K>*/ K}`]: releaseFunctionType;
 } & {
     [K in ExternalComponentManagerListNameType as `addComponent${ /*Capitalize<K>*/ K}`]: addComponentFunctionType;
+} & {
+    [K in ExternalComponentManagerListNameType as `registryComponent${ /*Capitalize<K>*/ K}`]: registryComponentFunctionType;
 };
 
 interface AppContainerManagerMethodsInterface extends AppContainerManagerMethodsType {
@@ -51,8 +57,12 @@ export class AppContainerManager {
 
     protected externalComponentManager: ExternalComponentManager;
 
-    addComponent<T>(componentInfo: AppExternalComponentInfo<T>) {
+    addComponent<T>(componentInfo: ExternalComponentShowInfo<T>) {
         this.externalComponentManager.addComponent(componentInfo);
+    }
+
+    registryComponent<T>(componentInfo: ExternalComponentRegistryInfo) {
+        this.externalComponentManager.registryComponent(componentInfo);
     }
 }
 
@@ -87,6 +97,7 @@ function AppContainerManagerMethodsFactory(): ModSubUiAngularJsBodyConstructorTy
                 (this as any)['bootstrap' + N/*.trim()*/] = this._appContainerManager[N].bootstrap.bind(this._appContainerManager[N]);
                 (this as any)['release' + N/*.trim()*/] = this._appContainerManager[N].release.bind(this._appContainerManager[N]);
                 (this as any)['addComponent' + N/*.trim()*/] = this._appContainerManager[N].addComponent.bind(this._appContainerManager[N]);
+                (this as any)['registryComponent' + N/*.trim()*/] = this._appContainerManager[N].registryComponent.bind(this._appContainerManager[N]);
             });
         }
     }

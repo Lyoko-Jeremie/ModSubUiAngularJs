@@ -20,7 +20,7 @@ const config = {
   entry: {
     // Your entry file
     webpack_inject_early: './src_inject/inject_early.ts',
-    // test: './src_inject/AngularJs/test.ts',
+    test: './src_inject/test.ts',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

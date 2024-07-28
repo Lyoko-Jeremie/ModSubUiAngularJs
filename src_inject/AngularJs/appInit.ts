@@ -1,5 +1,6 @@
 import ng from 'angular';
 import angular from 'angular';
+import {ExternalComponentManager} from "./ExternalComponentManager";
 
 
 export function getNg() {
@@ -39,7 +40,7 @@ export class NgAppContainer {
             // bindings: {externalComponents: '<'},
             template: `
 {{externalComponentRef.externalComponents.length}}
-<div ng-repeat="c in externalComponentRef.externalComponents">
+<div ng-repeat="c in externalComponentRef.externalComponentsShow">
     <div dynamic-component component-info="c"></div>
 </div>
 `,
@@ -47,6 +48,7 @@ export class NgAppContainer {
                 // console.log('app-container');
                 // console.log(externalComponentRef);
                 ($scope as any).externalComponentRef = thisPtr.externalComponentRef;
+                thisPtr.externalComponentRef.externalComponentsShow;
             }],
         });
 
@@ -72,88 +74,6 @@ export class NgAppContainer {
     }
 }
 
-
-export interface AppExternalComponentInfo<DataType extends (any | undefined)> {
-    selector: string;
-    componentCreateInfo?: () => {
-        selector: string,
-        componentName: string,
-        componentOptions: ng.IComponentOptions,
-    };
-    componentRegister?: (rootAppModule: ng.IModule) => {
-        selector: string,
-    };
-    data?: DataType;
-}
-
-export class ExternalComponentManager {
-    protected _externalComponents: AppExternalComponentInfo<any>[] = [];
-
-    protected isInit = false;
-
-    constructor() {
-    }
-
-    addComponent(componentInfo: AppExternalComponentInfo<any>) {
-        if (this.isInit) {
-            console.error('Cannot add component after fullFillComponent');
-            return;
-        }
-        this._externalComponents.push(componentInfo);
-    }
-
-    fullFillComponent(
-        _M: ng.IModule,
-    ) {
-        this.isInit = true;
-        this._externalComponents.forEach((c) => {
-            let selector: string;
-            if (c.componentCreateInfo) {
-                const componentInfo = c.componentCreateInfo();
-                _M.component(componentInfo.componentName, componentInfo.componentOptions);
-                selector = componentInfo.selector;
-            } else if (c.componentRegister) {
-                selector = c.componentRegister(_M).selector;
-            } else {
-                return;
-            }
-            c.selector = selector;
-        });
-    }
-
-    get externalComponents() {
-        return this._externalComponents;
-    }
-
-}
-
-// ngAppContainerInstance.externalComponentRef.addComponent({
-//     selector: 'a-component1',
-//     componentCreateInfo: () => {
-//         return {
-//             selector: 'a-component1',
-//             componentName: 'aComponent1',
-//             componentOptions: {
-//                 bindings: {data: '<'},
-//                 template: '<div>Component 1: {{$ctrl.data}}</div>'
-//             }
-//         }
-//     },
-//     data: 1,
-// } satisfies AppExternalComponentInfo<any>);
-// ngAppContainerInstance.externalComponentRef.addComponent({
-//     selector: 'a-component2',
-//     componentRegister: rootAppModule => {
-//         rootAppModule.component('aComponent2', {
-//             bindings: {data: '<'},
-//             template: '<div>Component 2: {{$ctrl.data}}</div>'
-//         });
-//         return {
-//             selector: 'a-component2',
-//         };
-//     },
-//     data: 2,
-// } satisfies AppExternalComponentInfo<any>);
 
 // @ts-ignore
 // window.installApp = ngAppContainerInstance.installApp.bind(ngAppContainerInstance);
