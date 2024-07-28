@@ -1,4 +1,4 @@
-import ng from "angular";
+import ng, {IController} from "angular";
 import {ComponentRegistryCallback} from "../ExternalComponentManager";
 import {get, clone} from "lodash";
 
@@ -20,37 +20,39 @@ export interface OrderComponentConfig {
         selectedKey: string | number,
         config: OrderComponentConfig & Record<any, any>,
     ) => void;
+    hostClass?: string;
+    selectClass?: string;
 }
 
 export const createOrderComponent: ComponentRegistryCallback = (rootAppModule: ng.IModule) => {
     rootAppModule.component('orderComponent', {
         bindings: {data: '<'},
         template: `
-                    <div style="min-height: 15em;">
-                        <select multiple style="min-height: 15em;min-width: 10em;">
-                            <option
-                                ng-repeat="item in $ctrl.data.list track by item.key" 
-                                value="{{item.key}}" 
-                                ng-selected="item.selected"
-                                ng-click="selectKey(item)"
-                            >{{item.str}}</option>
-                        </select>
-                        <button
-                            style="display: block;" 
-                            ng-click="MoveSelectedItem('up1')"
-                        >MoveSelectedItemUp</button>
-                        <button
-                            style="display: block;" 
-                            ng-click="MoveSelectedItem('down1')"
-                        >MoveSelectedItemDown</button>
-<!--                        <button -->
-<!--                            style="display: block;" -->
-<!--                            ng-click="test()"-->
-<!--                        >test</button>-->
-                    </div>
+            <select multiple style="min-height: 15em;min-width: 10em;" class="order-component-select">
+                <option
+                    ng-repeat="item in $ctrl.data.list track by item.key" 
+                    value="{{item.key}}" 
+                    ng-selected="item.selected"
+                    ng-click="selectKey(item)"
+                >{{item.str}}</option>
+            </select>
+            <button
+                style="display: block;" 
+                ng-click="MoveSelectedItem('up1')"
+            >MoveSelectedItemUp</button>
+            <button
+                style="display: block;" 
+                ng-click="MoveSelectedItem('down1')"
+            >MoveSelectedItemDown</button>
+<!--            <button -->
+<!--                style="display: block;" -->
+<!--                ng-click="test()"-->
+<!--            >test</button>-->
                 `,
         controller: ['$scope', '$compile', '$element', function (scope: ng.IScope, $compile: ng.ICompileService, $element: ng.IAugmentedJQuery) {
-            const $scope = scope as ng.IScope & { $ctrl: { data: OrderComponentConfig } } & Record<string, any>;
+            const $scope = scope as ng.IScope & {
+                $ctrl: IController & { data: OrderComponentConfig }
+            } & Record<string, any>;
             // $scope.data: OrderComponentConfig;
             // console.log('Order Component Controller', clone($scope));
             // console.log('Order Component Controller', get(clone($scope), '$ctrl'));
@@ -74,6 +76,17 @@ export const createOrderComponent: ComponentRegistryCallback = (rootAppModule: n
             };
 
             $element.css('display', 'block');
+            $element.addClass('order-component-host');
+
+            $scope.$ctrl.$onInit = function () {
+                // console.log('OrderComponent onInit', $scope.$ctrl.data);
+                if ($scope.$ctrl.data.hostClass) {
+                    $element.addClass($scope.$ctrl.data.hostClass);
+                }
+                if ($scope.$ctrl.data.selectClass) {
+                    $element.find('select').addClass($scope.$ctrl.data.selectClass);
+                }
+            }
 
             type ListType = OrderComponentConfig['list'];
 
