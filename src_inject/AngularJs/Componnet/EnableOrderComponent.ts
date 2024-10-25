@@ -45,6 +45,7 @@ export interface EnableOrderComponentConfig {
         DisableSelectedItem?: string,
         MoveDisabledSelectedItemUp?: string,
         MoveDisabledSelectedItemDown?: string,
+        title?: string,
     };
 }
 
@@ -53,6 +54,7 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
     rootAppModule.component('enableOrderComponent', {
         bindings: {data: '<'},
         template: `
+            <div class="enable-order-component-title" style="font-size: x-large;margin: 0 auto 0.25em 0.5em;">{{t('title')}}</div>
             <select multiple style="min-height: 15em;min-width: 10em;" class="enable-order-component-select select-enable">
                 <option
                     ng-repeat="item in $ctrl.data.listEnabled track by item.key" 
@@ -83,6 +85,7 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
                     ng-click="selectKeyDisable(item)"
                 >{{item.str}}</option>
             </select>
+            <hr/>
 <!--            <button -->
 <!--                style="display: block;" -->
 <!--                ng-click="test()"-->
@@ -126,6 +129,7 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
             };
 
             $element.css('display', 'block');
+            $element.css('padding', '0.5em 0');
             $element.addClass('enable-order-component-host');
 
             $scope.$ctrl.$onInit = function () {
