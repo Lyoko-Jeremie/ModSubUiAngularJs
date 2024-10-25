@@ -1,6 +1,5 @@
 import ng, {IController} from "angular";
-import {ComponentRegistryCallback} from "../ExternalComponentManager";
-import {get, clone} from "lodash";
+import {ComponentRegistryCallback} from "../ExternalComponentManagerInterface";
 
 export enum OrderAction {
     up1 = 'up1',

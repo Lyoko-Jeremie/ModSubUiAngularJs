@@ -1,5 +1,5 @@
 import ng, {IController} from "angular";
-import {ComponentRegistryCallback} from "../ExternalComponentManager";
+import {ComponentRegistryCallback} from "../ExternalComponentManagerInterface";
 
 export enum EnableOrderAction {
     enableUp1 = 'enableUp1',

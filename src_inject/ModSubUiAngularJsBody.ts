@@ -4,11 +4,8 @@ import {
     getNg
 } from './AngularJs/appInit';
 import type ng from "angular";
-import {
-    ExternalComponentManager,
-    ExternalComponentRegistryInfo,
-    ExternalComponentShowInfo
-} from "./AngularJs/ExternalComponentManager";
+import {ExternalComponentManager} from "./AngularJs/ExternalComponentManager";
+import {ExternalComponentRegistryInfo, ExternalComponentShowInfo} from "./AngularJs/ExternalComponentManagerInterface";
 
 export const ExternalComponentManagerListName = [
     'ModGuiConfig',

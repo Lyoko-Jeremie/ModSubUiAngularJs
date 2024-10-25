@@ -1,24 +1,14 @@
 import ng from "angular";
 import {has, isString, isObject, isFunction} from 'lodash';
 import {assert, is, ReturnType} from 'tsafe';
+import {
+    ComponentCreateCallback,
+    ExternalComponentManagerInterface,
+    ExternalComponentRegistryInfo,
+    ExternalComponentShowInfo,
+} from "./ExternalComponentManagerInterface";
 
-export type ComponentCreateCallback = (rootAppModule: ng.IModule) => {
-    selector: string,
-    componentName: string,
-    componentOptions: ng.IComponentOptions,
-};
-export type ComponentRegistryCallback = (rootAppModule: ng.IModule) => {
-    selector: string,
-};
-
-export type ExternalComponentRegistryInfo = ComponentCreateCallback | ComponentRegistryCallback;
-
-export interface ExternalComponentShowInfo<DataType extends (any | undefined)> {
-    selector: string;
-    data?: DataType;
-}
-
-export class ExternalComponentManager {
+export class ExternalComponentManager implements ExternalComponentManagerInterface {
     protected _externalComponentsShow: ExternalComponentShowInfo<any>[] = [];
     protected _externalComponentsRegistry: ExternalComponentRegistryInfo[] = [];
 
