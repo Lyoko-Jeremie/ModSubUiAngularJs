@@ -2,18 +2,20 @@ import type {LifeTimeCircleHook, LogWrapper} from "../../../dist-BeforeSC2/ModLo
 import type {AddonPluginHookPointEx} from "../../../dist-BeforeSC2/AddonPlugin";
 import type {SC2DataManager} from "../../../dist-BeforeSC2/SC2DataManager";
 import type {ModUtils} from "../../../dist-BeforeSC2/Utils";
-import {ExternalComponentManagerListName, ModSubUiAngularJsBody} from './ModSubUiAngularJsBody';
+import {ModSubUiAngularJsBody} from './ModSubUiAngularJsBody';
 import {ModInfo} from "../../../dist-BeforeSC2/ModLoader";
 import {ModZipReader} from "../../../dist-BeforeSC2/ModZipReader";
 import {createOrderComponent} from "./AngularJs/Componnet/OrderComponent";
 import {createEnableOrderComponent} from "./AngularJs/Componnet/EnableOrderComponent";
+import {ModSubUiAngularJsModeExportInterface} from "./ModSubUiAngularJsModeExportInterface";
+import {ExternalComponentManagerListName} from "./AppContainerManagerMethodsInterface";
 
 export const BuildInComponentList = [
     createOrderComponent,
     createEnableOrderComponent,
 ];
 
-export class ModSubUiAngularJs extends ModSubUiAngularJsBody implements AddonPluginHookPointEx {
+export class ModSubUiAngularJs extends ModSubUiAngularJsBody implements AddonPluginHookPointEx, ModSubUiAngularJsModeExportInterface {
     private logger: LogWrapper;
 
     nowModName: string = 'ModSubUiAngularJs';

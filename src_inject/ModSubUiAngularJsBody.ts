@@ -6,36 +6,11 @@ import {
 import type ng from "angular";
 import {ExternalComponentManager} from "./AngularJs/ExternalComponentManager";
 import {ExternalComponentRegistryInfo, ExternalComponentShowInfo} from "./AngularJs/ExternalComponentManagerInterface";
-
-export const ExternalComponentManagerListName = [
-    'ModGuiConfig',
-    'ModInGameConfig',
-] as const;
-
-type ExternalComponentManagerListNameType = typeof ExternalComponentManagerListName[number];
-
-export type bootstrapFunctionType = (el: HTMLElement) => void;
-export type releaseFunctionType = () => void;
-export type addComponentFunctionType = ExternalComponentManager['addComponent'];
-export type cleanComponentFunctionType = ExternalComponentManager['addComponent'];
-export type registryComponentFunctionType = ExternalComponentManager['registryComponent'];
-
-type AppContainerManagerMethodsType = {
-    [K in ExternalComponentManagerListNameType as `bootstrap${ /*Capitalize<K>*/ K}`]: bootstrapFunctionType;
-} & {
-    [K in ExternalComponentManagerListNameType as `release${ /*Capitalize<K>*/ K}`]: releaseFunctionType;
-} & {
-    [K in ExternalComponentManagerListNameType as `addComponent${ /*Capitalize<K>*/ K}`]: addComponentFunctionType;
-} & {
-    [K in ExternalComponentManagerListNameType as `cleanComponent${ /*Capitalize<K>*/ K}`]: cleanComponentFunctionType;
-} & {
-    [K in ExternalComponentManagerListNameType as `registryComponent${ /*Capitalize<K>*/ K}`]: registryComponentFunctionType;
-};
-
-interface AppContainerManagerMethodsInterface extends AppContainerManagerMethodsType {
-}
-
-export type AppContainerManagerMethodsInterfaceKey = keyof AppContainerManagerMethodsInterface;
+import {
+    AppContainerManagerMethodsInterface,
+    ExternalComponentManagerListName,
+    ExternalComponentManagerListNameType,
+} from "./AppContainerManagerMethodsInterface";
 
 export class AppContainerManager {
     ngAppContainerInstance?: NgAppContainer;
