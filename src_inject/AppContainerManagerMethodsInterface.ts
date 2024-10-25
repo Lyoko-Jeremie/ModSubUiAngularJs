@@ -1,4 +1,4 @@
-import {ExternalComponentManager} from "./AngularJs/ExternalComponentManager";
+import {ExternalComponentRegistryInfo, ExternalComponentShowInfo} from "./AngularJs/ExternalComponentManagerInterface";
 
 export const ExternalComponentManagerListName = [
     'ModGuiConfig',
@@ -9,9 +9,9 @@ export type ExternalComponentManagerListNameType = typeof ExternalComponentManag
 
 export type bootstrapFunctionType = (el: HTMLElement) => void;
 export type releaseFunctionType = () => void;
-export type addComponentFunctionType = ExternalComponentManager['addComponent'];
-export type cleanComponentFunctionType = ExternalComponentManager['addComponent'];
-export type registryComponentFunctionType = ExternalComponentManager['registryComponent'];
+export type addComponentFunctionType = <T>(componentShowInfo: ExternalComponentShowInfo<T>) => void;
+export type cleanComponentFunctionType = <T>(componentShowInfo: ExternalComponentShowInfo<T>) => void;
+export type registryComponentFunctionType = (componentRegistryInfo: ExternalComponentRegistryInfo) => void;
 
 export type AppContainerManagerMethodsType = {
     [K in ExternalComponentManagerListNameType as `bootstrap${ /*Capitalize<K>*/ K}`]: bootstrapFunctionType;
@@ -26,6 +26,9 @@ export type AppContainerManagerMethodsType = {
 };
 
 export interface AppContainerManagerMethodsInterface extends AppContainerManagerMethodsType {
+    addComponent: addComponentFunctionType;
+    cleanComponent: cleanComponentFunctionType;
+    registryComponent: registryComponentFunctionType;
 }
 
 export type AppContainerManagerMethodsInterfaceKey = keyof AppContainerManagerMethodsInterface;
