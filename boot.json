@@ -4,13 +4,11 @@
   "styleFileList": [
   ],
   "scriptFileList_earlyload": [
-    "dist/earlyload.js"
   ],
   "scriptFileList_inject_early": [
     "dist/webpack_inject_early.js"
   ],
   "scriptFileList_preload": [
-    "dist/preload.js"
   ],
   "scriptFileList": [
   ],
