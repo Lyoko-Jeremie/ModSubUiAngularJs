@@ -33,7 +33,7 @@ export const createOrderComponent: ComponentRegistryCallback = (rootAppModule: n
         bindings: {data: '<'},
         template: `
             <div class="order-component-title" style="font-size: x-large;margin: 0 auto 0.25em 0.5em;">{{t('title')}}</div>
-            <select multiple style="min-height: 15em;min-width: 10em;" class="order-component-select">
+            <select multiple style="min-width: 10em;" class="order-component-select">
                 <option
                     ng-repeat="item in $ctrl.data.list track by item.key" 
                     value="{{item.key}}" 

@@ -56,7 +56,7 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
         bindings: {data: '<'},
         template: `
             <div class="enable-order-component-title" style="font-size: x-large;margin: 0 auto 0.25em 0.5em;">{{t('title')}}</div>
-            <select multiple style="min-height: 15em;min-width: 10em;" class="enable-order-component-select select-enable">
+            <select multiple style="min-width: 10em;" class="enable-order-component-select select-enable">
                 <option
                     ng-repeat="item in $ctrl.data.listEnabled track by item.key" 
                     value="{{item.key}}" 
@@ -78,7 +78,7 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
                 <input type="button" ng-click="MoveSelectedItem('up1', 'disable')" ng-value="t('MoveDisabledSelectedItemUp')" />
                 <input type="button" ng-click="MoveSelectedItem('down1', 'disable')" ng-value="t('MoveDisabledSelectedItemDown')" />
             </div>
-            <select multiple style="min-height: 15em;min-width: 10em;" class="enable-order-component-select select-disable">
+            <select multiple style="min-width: 10em;" class="enable-order-component-select select-disable">
                 <option
                     ng-repeat="item in $ctrl.data.listDisabled track by item.key" 
                     value="{{item.key}}" 
