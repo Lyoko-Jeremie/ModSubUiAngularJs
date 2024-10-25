@@ -22,7 +22,7 @@ export interface ExternalComponentManagerInterface {
 
     addComponent<T>(componentShowInfo: ExternalComponentShowInfo<T>): void;
 
-    cleanComponent<T>(componentShowInfo: ExternalComponentShowInfo<T>): void;
+    cleanComponent(): void;
 
     fullFillComponent(
         _M: ng.IModule,

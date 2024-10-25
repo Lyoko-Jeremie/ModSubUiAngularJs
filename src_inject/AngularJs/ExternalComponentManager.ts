@@ -35,7 +35,7 @@ export class ExternalComponentManager implements ExternalComponentManagerInterfa
         this._externalComponentsShow.push(componentShowInfo);
     }
 
-    cleanComponent<T>(componentShowInfo: ExternalComponentShowInfo<T>) {
+    cleanComponent() {
         this._externalComponentsShow = [];
     }
 

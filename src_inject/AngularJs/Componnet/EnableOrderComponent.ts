@@ -1,5 +1,6 @@
 import ng, {IController} from "angular";
 import {ComponentRegistryCallback} from "../ExternalComponentManagerInterface";
+import {get} from "lodash";
 
 export enum EnableOrderAction {
     enableUp1 = 'enableUp1',
@@ -99,6 +100,7 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
             // console.log('Order Component Controller', clone($scope));
             // console.log('Order Component Controller', get(clone($scope), '$ctrl'));
             // console.log('Order Component Controller', get($scope, '$ctrl.data'));
+            // console.log('Order Component Controller $scope.$ctrl.data', $scope.$ctrl.data);
 
             const callOnChange = (action: EnableOrderAction) => {
                 if ($scope.$ctrl.data.onChange) {
@@ -147,6 +149,12 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
                     $element.find('button').addClass($scope.$ctrl.data.buttonClass);
                 }
             }
+
+            // $scope.$ctrl.$onDestroy = function () {
+            //     $scope.$ctrl.data.listEnabled = [];
+            //     $scope.$ctrl.data.listDisabled = [];
+            //     // console.log('OrderComponent onDestroy', $scope.$ctrl.data);
+            // }
 
             $scope.t = function (textTag: keyof EnableOrderComponentConfig['text']) {
                 // console.log('t', textTag, $scope.$ctrl.data.text?.[textTag], $scope.$ctrl.data.text);

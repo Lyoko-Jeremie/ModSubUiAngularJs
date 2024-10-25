@@ -10,7 +10,7 @@ export type ExternalComponentManagerListNameType = typeof ExternalComponentManag
 export type bootstrapFunctionType = (el: HTMLElement) => void;
 export type releaseFunctionType = () => void;
 export type addComponentFunctionType = <T>(componentShowInfo: ExternalComponentShowInfo<T>) => void;
-export type cleanComponentFunctionType = <T>(componentShowInfo: ExternalComponentShowInfo<T>) => void;
+export type cleanComponentFunctionType = () => void;
 export type registryComponentFunctionType = (componentRegistryInfo: ExternalComponentRegistryInfo) => void;
 
 export type AppContainerManagerMethodsType = {

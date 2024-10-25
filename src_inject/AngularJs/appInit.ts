@@ -50,6 +50,7 @@ export class NgAppContainer {
                 // console.log(externalComponentRef);
                 ($scope as any).externalComponentRef = thisPtr.externalComponentRef;
                 thisPtr.externalComponentRef.externalComponentsShow;
+                // console.log('($scope as any).externalComponentRef', ($scope as any).externalComponentRef);
             }],
         });
 
@@ -70,7 +71,9 @@ export class NgAppContainer {
     }
 
     destroyApp() {
+        this.externalComponentRef.cleanComponent();
         if (this.el) {
+            // console.log('[NgAppContainer] Destroying app');
             ng.element(this.el).scope().$destroy();
         }
     }

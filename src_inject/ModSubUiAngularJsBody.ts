@@ -38,8 +38,8 @@ export class AppContainerManager {
         this.externalComponentManager.addComponent(componentInfo);
     }
 
-    cleanComponent<T>(componentInfo: ExternalComponentShowInfo<T>) {
-        this.externalComponentManager.cleanComponent(componentInfo);
+    cleanComponent() {
+        this.externalComponentManager.cleanComponent();
     }
 
     registryComponent<T>(componentInfo: ExternalComponentRegistryInfo) {
