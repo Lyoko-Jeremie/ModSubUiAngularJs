@@ -21,6 +21,7 @@ export interface OrderComponentConfig {
     ) => void;
     hostClass?: string;
     selectClass?: string;
+    buttonClass?: string;
     text?: {
         MoveSelectedItemUp?: string,
         MoveSelectedItemDown?: string,
@@ -72,7 +73,11 @@ export const createOrderComponent: ComponentRegistryCallback = (rootAppModule: n
                     if (selectedN) {
                         selectedN.selected = true;
                     }
-                    $scope.$ctrl.data.onChange(action, l, $scope.selectedKey, $scope.$ctrl.data);
+                    try {
+                        $scope.$ctrl.data.onChange(action, l, $scope.selectedKey, $scope.$ctrl.data);
+                    } catch (e) {
+                        console.error('[ModSubUiAngularJs] OrderComponent. Error in callOnChange', e);
+                    }
                 }
             };
 
@@ -92,6 +97,9 @@ export const createOrderComponent: ComponentRegistryCallback = (rootAppModule: n
                 }
                 if ($scope.$ctrl.data.selectClass) {
                     $element.find('select').addClass($scope.$ctrl.data.selectClass);
+                }
+                if ($scope.$ctrl.data.buttonClass) {
+                    $element.find('input[type="button"]').addClass($scope.$ctrl.data.buttonClass);
                 }
             }
 
@@ -126,7 +134,7 @@ export const createOrderComponent: ComponentRegistryCallback = (rootAppModule: n
                 const selectedKey = $scope.selectedKey;
                 const list = $scope.$ctrl.data.list;
                 const selectedIndex = list.findIndex((item) => item.key === selectedKey);
-                console.log('MoveSelectedItem', selectedKey, selectedIndex, direction, list);
+                console.log('[ModSubUiAngularJs] MoveSelectedItem', selectedKey, selectedIndex, direction, list);
                 if (selectedIndex === -1) {
                     return;
                 }

@@ -126,7 +126,11 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
                     if (selectedNDisable) {
                         selectedNDisable.selected = true;
                     }
-                    $scope.$ctrl.data.onChange(action, lEnable, lDisable, $scope.selectedKeyEnable, $scope.selectedKeyDisable, $scope.$ctrl.data);
+                    try{
+                        $scope.$ctrl.data.onChange(action, lEnable, lDisable, $scope.selectedKeyEnable, $scope.selectedKeyDisable, $scope.$ctrl.data);
+                    }catch (e) {
+                        console.error('[ModSubUiAngularJs] EnableOrderComponent. Error in onChange', e);
+                    }
                 }
             };
 
@@ -146,7 +150,7 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
                     $element.find('.select-disable').addClass($scope.$ctrl.data.selectDisabledClass);
                 }
                 if ($scope.$ctrl.data.buttonClass) {
-                    $element.find('button').addClass($scope.$ctrl.data.buttonClass);
+                    $element.find('input[type="button"]').addClass($scope.$ctrl.data.buttonClass);
                 }
             }
 
@@ -198,7 +202,7 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
                 const selectedKey = listType === 'enable' ? $scope.selectedKeyEnable : $scope.selectedKeyDisable;
                 const list = $scope.$ctrl.data[listType === 'enable' ? 'listEnabled' : 'listDisabled'];
                 const selectedIndex = list.findIndex((item) => item.key === selectedKey);
-                console.log('MoveSelectedItem', [selectedKey, selectedIndex, direction, listType, list]);
+                console.log('[ModSubUiAngularJs] MoveSelectedItem', [selectedKey, selectedIndex, direction, listType, list]);
                 if (selectedIndex === -1) {
                     return;
                 }
@@ -218,7 +222,7 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
                     const listEnabled = $scope.$ctrl.data.listEnabled;
                     const listDisabled = $scope.$ctrl.data.listDisabled;
                     const selectedIndexEnable = listEnabled.findIndex((item) => item.key === selectedKeyEnable);
-                    console.log('EnableDisableItem', [action, selectedKeyEnable, selectedIndexEnable, action, listEnabled, listDisabled]);
+                    console.log('[ModSubUiAngularJs] EnableDisableItem', [action, selectedKeyEnable, selectedIndexEnable, action, listEnabled, listDisabled]);
                     if (selectedIndexEnable === -1) {
                         return;
                     }
@@ -230,7 +234,7 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
                     const listEnabled = $scope.$ctrl.data.listEnabled;
                     const listDisabled = $scope.$ctrl.data.listDisabled;
                     const selectedIndexDisable = listDisabled.findIndex((item) => item.key === selectedKeyDisable);
-                    console.log('EnableDisableItem', [action, selectedKeyDisable, selectedIndexDisable, action, listEnabled, listDisabled]);
+                    console.log('[ModSubUiAngularJs] EnableDisableItem', [action, selectedKeyDisable, selectedIndexDisable, action, listEnabled, listDisabled]);
                     if (selectedIndexDisable === -1) {
                         return;
                     }

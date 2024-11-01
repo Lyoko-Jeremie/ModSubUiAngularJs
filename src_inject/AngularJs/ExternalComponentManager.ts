@@ -21,11 +21,11 @@ export class ExternalComponentManager implements ExternalComponentManagerInterfa
 
     registryComponent(componentRegistryInfo: ExternalComponentRegistryInfo) {
         if (this.isInit) {
-            console.error('Cannot registryComponent after fullFillComponent');
+            console.error('[ModSubUiAngularJs] Cannot registryComponent after fullFillComponent');
             return;
         }
         if (!isFunction(componentRegistryInfo)) {
-            console.error('componentRegistryInfo is not a function', componentRegistryInfo);
+            console.error('[ModSubUiAngularJs] componentRegistryInfo is not a function', componentRegistryInfo);
             return;
         }
         this._externalComponentsRegistry.push(componentRegistryInfo);
@@ -53,7 +53,7 @@ export class ExternalComponentManager implements ExternalComponentManagerInterfa
                 }
                 return selector;
             } catch (e) {
-                console.error('Error in external component registry', e);
+                console.error('[ModSubUiAngularJs] Error in external component registry', e);
             }
         }).filter<string>((c): c is string => !!c);
     }

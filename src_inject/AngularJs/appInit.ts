@@ -54,14 +54,14 @@ export class NgAppContainer {
             }],
         });
 
-        console.log('NgAppContainer created');
+        console.log('[ModSubUiAngularJs] NgAppContainer created');
     }
 
     el?: HTMLElement;
 
     installApp(el: HTMLElement) {
         if (this.el) {
-            console.error('App already installed');
+            console.error('[ModSubUiAngularJs] App already installed');
             return ng.element(el).injector();
         }
         this.el = el;
