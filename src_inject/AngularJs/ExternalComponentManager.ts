@@ -43,7 +43,7 @@ export class ExternalComponentManager implements ExternalComponentManagerInterfa
         _M: ng.IModule,
     ) {
         this.isInit = true;
-        this._registeredComponents = this._externalComponentsRegistry.map((c) => {
+        return this._registeredComponents = this._externalComponentsRegistry.map((c) => {
             try {
                 const R = c(_M);
                 let selector = R.selector;
