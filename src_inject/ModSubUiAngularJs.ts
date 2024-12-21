@@ -9,10 +9,12 @@ import {createOrderComponent} from "./AngularJs/Componnet/OrderComponent";
 import {createEnableOrderComponent} from "./AngularJs/Componnet/EnableOrderComponent";
 import {ModSubUiAngularJsModeExportInterface} from "./ModSubUiAngularJsModeExportInterface";
 import {ExternalComponentManagerListName} from "./AppContainerManagerMethodsInterface";
+import {createSimpleSelectComponent} from "./AngularJs/Componnet/SimpleSelectComponent";
 
 export const BuildInComponentList = [
     createOrderComponent,
     createEnableOrderComponent,
+    createSimpleSelectComponent,
 ];
 
 export class ModSubUiAngularJs extends ModSubUiAngularJsBody implements AddonPluginHookPointEx, ModSubUiAngularJsModeExportInterface {
