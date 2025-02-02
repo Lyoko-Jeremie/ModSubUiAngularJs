@@ -56,14 +56,26 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
         bindings: {data: '<'},
         template: `
             <div class="enable-order-component-title" style="font-size: x-large;margin: 0 auto 0.25em 0.5em;">{{t('title')}}</div>
-            <select multiple style="min-width: 10em;" class="enable-order-component-select select-enable">
-                <option
-                    ng-repeat="item in $ctrl.data.listEnabled track by item.key" 
-                    value="{{item.key}}" 
-                    ng-selected="item.selected"
-                    ng-click="selectKeyEnable(item)"
-                >{{item.str}}</option>
-            </select>
+<!--             darkslategray   lightblue-->
+            <div style="display: flex; flex-direction: column;font-size: large;width: auto;border: 1px solid lightblue;"
+                 class="enable-order-component-select select-enable">
+                <div class=""
+                     ng-repeat="item in $ctrl.data.listEnabled track by item.key"
+                     ng-click="selectKeyEnable(item)"
+                     ng-style="{'background-color': (item.selected ? 'pink' : ''), 'color': (item.selected ? 'black' : ''), }" 
+                     style="cursor: pointer;user-select: none;padding: 0.1em 0;"
+                >
+                    {{item.str}}
+                </div>
+            </div>
+<!--            <select multiple style="min-width: 10em;" class="enable-order-component-select select-enable">-->
+<!--                <option-->
+<!--                    ng-repeat="item in $ctrl.data.listEnabled track by item.key" -->
+<!--                    value="{{item.key}}" -->
+<!--                    ng-selected="item.selected"-->
+<!--                    ng-click="selectKeyEnable(item)"-->
+<!--                >{{item.str}}</option>-->
+<!--            </select>-->
             <div style="display: block;" class="enable-order-component-enable-select-button">
                 <input type="button" ng-click="MoveSelectedItem('up1', 'enable')" ng-value="t('MoveEnabledSelectedItemUp')" />
                 <input type="button" ng-click="MoveSelectedItem('down1', 'enable')" ng-value="t('MoveEnabledSelectedItemDown')" />
@@ -78,14 +90,25 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
                 <input type="button" ng-click="MoveSelectedItem('up1', 'disable')" ng-value="t('MoveDisabledSelectedItemUp')" />
                 <input type="button" ng-click="MoveSelectedItem('down1', 'disable')" ng-value="t('MoveDisabledSelectedItemDown')" />
             </div>
-            <select multiple style="min-width: 10em;" class="enable-order-component-select select-disable">
-                <option
-                    ng-repeat="item in $ctrl.data.listDisabled track by item.key" 
-                    value="{{item.key}}" 
-                    ng-selected="item.selected"
-                    ng-click="selectKeyDisable(item)"
-                >{{item.str}}</option>
-            </select>
+            <div style="display: flex; flex-direction: column;font-size: large;width: auto;border: 1px solid lightblue;"
+                 class="enable-order-component-select select-disable">
+                <div class=""
+                     ng-repeat="item in $ctrl.data.listDisabled track by item.key"
+                     ng-click="selectKeyDisable(item)"
+                     ng-style="{'background-color': (item.selected ? 'pink' : ''), 'color': (item.selected ? 'black' : ''), }" 
+                     style="cursor: pointer;user-select: none;padding: 0.1em 0;"
+                >
+                    {{item.str}}
+                </div>
+            </div>
+<!--            <select multiple style="min-width: 10em;" class="enable-order-component-select select-disable">-->
+<!--                <option-->
+<!--                    ng-repeat="item in $ctrl.data.listDisabled track by item.key" -->
+<!--                    value="{{item.key}}" -->
+<!--                    ng-selected="item.selected"-->
+<!--                    ng-click="selectKeyDisable(item)"-->
+<!--                >{{item.str}}</option>-->
+<!--            </select>-->
             <hr/>
 <!--            <button -->
 <!--                style="display: block;" -->
@@ -126,9 +149,9 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
                     if (selectedNDisable) {
                         selectedNDisable.selected = true;
                     }
-                    try{
+                    try {
                         $scope.$ctrl.data.onChange(action, lEnable, lDisable, $scope.selectedKeyEnable, $scope.selectedKeyDisable, $scope.$ctrl.data);
-                    }catch (e) {
+                    } catch (e) {
                         console.error('[ModSubUiAngularJs] EnableOrderComponent. Error in onChange', e);
                     }
                 }
@@ -152,7 +175,7 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
                 if ($scope.$ctrl.data.buttonClass) {
                     $element.find('input[type="button"]').addClass($scope.$ctrl.data.buttonClass);
                 }
-            }
+            };
 
             // $scope.$ctrl.$onDestroy = function () {
             //     $scope.$ctrl.data.listEnabled = [];
@@ -163,23 +186,38 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
             $scope.t = function (textTag: keyof EnableOrderComponentConfig['text']) {
                 // console.log('t', textTag, $scope.$ctrl.data.text?.[textTag], $scope.$ctrl.data.text);
                 return $scope.$ctrl.data.text?.[textTag] || textTag;
-            }
+            };
 
             type ListType = EnableOrderComponentConfig['listEnabled'];
 
             $scope.selectedKeyEnable = Number.MAX_SAFE_INTEGER;
             $scope.selectedKeyDisable = Number.MAX_SAFE_INTEGER;
 
+            const cleanSelectEnable = () => {
+                for (const k of $scope.$ctrl.data.listEnabled) {
+                    k.selected = false;
+                }
+            };
+            const cleanSelectDisable = () => {
+                for (const k of $scope.$ctrl.data.listDisabled) {
+                    k.selected = false;
+                }
+            };
+
             $scope.selectKeyEnable = function (key: ListType[0]) {
                 // console.log('selectKey', key);
+                cleanSelectEnable();
                 $scope.selectedKeyEnable = key.key;
+                key.selected = true;
                 callOnChange(EnableOrderAction.selectEnable);
-            }
+            };
             $scope.selectKeyDisable = function (key: ListType[0]) {
                 // console.log('selectKey', key);
+                cleanSelectDisable();
                 $scope.selectedKeyDisable = key.key;
+                key.selected = true;
                 callOnChange(EnableOrderAction.selectDisable);
-            }
+            };
 
             // Move list items up or down or swap
             $scope.moveItem = function (array: ListType, originIndex: number, destinationIndex: number) {
@@ -243,6 +281,8 @@ export const createEnableOrderComponent: ComponentRegistryCallback = (rootAppMod
                     callOnChange(EnableOrderAction.toDisable);
                 }
                 // clean select state
+                cleanSelectEnable();
+                cleanSelectDisable();
                 $scope.selectedKeyEnable = Number.MAX_SAFE_INTEGER;
                 $scope.selectedKeyDisable = Number.MAX_SAFE_INTEGER;
             }

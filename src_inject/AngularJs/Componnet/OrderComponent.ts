@@ -34,14 +34,25 @@ export const createOrderComponent: ComponentRegistryCallback = (rootAppModule: n
         bindings: {data: '<'},
         template: `
             <div class="order-component-title" style="font-size: x-large;margin: 0 auto 0.25em 0.5em;">{{t('title')}}</div>
-            <select multiple style="min-width: 10em;" class="order-component-select">
-                <option
-                    ng-repeat="item in $ctrl.data.list track by item.key" 
-                    value="{{item.key}}" 
-                    ng-selected="item.selected"
-                    ng-click="selectKey(item)"
-                >{{item.str}}</option>
-            </select>
+            <div style="display: flex; flex-direction: column;font-size: large;width: auto;border: 1px solid lightblue;"
+                 class="order-component-select">
+                <div class=""
+                     ng-repeat="item in $ctrl.data.list track by item.key"
+                     ng-click="selectKey(item)"
+                     ng-style="{'background-color': (item.selected ? 'pink' : ''), 'color': (item.selected ? 'black' : ''), }" 
+                     style="cursor: pointer;user-select: none;padding: 0.1em 0;"
+                >
+                    {{item.str}}
+                </div>
+            </div>
+<!--            <select multiple style="min-width: 10em;" class="order-component-select">-->
+<!--                <option-->
+<!--                    ng-repeat="item in $ctrl.data.list track by item.key" -->
+<!--                    value="{{item.key}}" -->
+<!--                    ng-selected="item.selected"-->
+<!--                    ng-click="selectKey(item)"-->
+<!--                >{{item.str}}</option>-->
+<!--            </select>-->
             <div style="display: block;" class="order-component-move-button">
                 <input type="button" ng-click="MoveSelectedItem('up1')" value="t('MoveSelectedItemUp')" />
                 <input type="button" ng-click="MoveSelectedItem('down1')" value="t('MoveSelectedItemDown')" />
